@@ -132,7 +132,7 @@ void handleMovement(int direction) {
     case 1:
       Serial.println("Moving Forward...");
       lcd.clear();
-      displayQueue();
+      // displayQueue();
       printToLCD(2, "Moving Forward...");
       moveMotor(HIGH, LOW, LOW, HIGH, 500);
       lcd.clear();
@@ -172,7 +172,7 @@ void handleMovement(int direction) {
 }
 
 void objectDetection() {
-  printToLCD(0, "Waiting for object");
+  printToLCD(0, "Waiting for object...");
   if (Serial.available() > 0) {
 
     char command = Serial.read();
@@ -181,7 +181,7 @@ void objectDetection() {
       case 'a':
         printToLCD(0, "Object a detected!");
         delay(1000);
-        printToLCD(0, "Moving Forward...");
+        printToLCD(0, "Moving Forward...");  
         lcd.clear();
         moveMotor(HIGH, LOW, LOW, HIGH, 500);
         break;
@@ -190,7 +190,7 @@ void objectDetection() {
         delay(1000);
         printToLCD(0, "Moving Backward...");
         lcd.clear();
-        moveMotor(LOW, HIGH, HIGH, LOW, 500);  // Move backward
+        moveMotor(LOW, HIGH, HIGH, LOW, 500);  
         break;
       case 'c':
         printToLCD(0, "Object c detected!");
@@ -214,46 +214,14 @@ void objectDetection() {
   }
 }
 
-// void lineFollower() {
-//   int S1 = digitalRead(IRL);
-//   int S2 = digitalRead(IRR);
-
-//   if (S1 == WHITE && S2 == WHITE) {
-//     // Forward
-//     digitalWrite(motor1Pin1, HIGH);
-//     digitalWrite(motor1Pin2, LOW);
-//     digitalWrite(motor2Pin3, LOW);
-//     digitalWrite(motor2Pin4, HIGH);
-//     analogWrite(motor1Enable, 255);
-//     analogWrite(motor2Enable, 255);
-//   } else if (S1 == BLACK && S2 == BLACK) {
-//     // Stop
-//     moveMotor(LOW, LOW, LOW, LOW, 0);
-//   } else if (S1 == WHITE && S2 == BLACK) {
-//     // Turn right
-//     digitalWrite(motor1Pin1, HIGH);
-//     digitalWrite(motor1Pin2, LOW);
-//     digitalWrite(motor2Pin3, LOW);
-//     digitalWrite(motor2Pin4, LOW);
-//     analogWrite(motor1Enable, 255);
-//     analogWrite(motor2Enable, 255);
-//   } else if (S1 == BLACK && S2 == WHITE) {
-//     // Turn left
-//     digitalWrite(motor1Pin1, LOW);
-//     digitalWrite(motor1Pin2, LOW);
-//     digitalWrite(motor2Pin3, LOW);
-//     digitalWrite(motor2Pin4, HIGH);
-//     analogWrite(motor1Enable, 255);
-//     analogWrite(motor2Enable, 255);
-//   }
-// }
-
-void undoQueue() {
+//NOTE: THIS AINT GONNA WORK
+//TO-DO: IMPLEMENT THE OPERATION FROM THE LIBRARY ITSELF OR CHANGE LIBRARY AND REFACTOR THE WHOLE CODE
+/*void undoQueue() {
   if (!queue.isEmpty()) {
     int queueSize = queue.getCount();
     int lastItem;
-    queue.peekIdx(&lastItem, queueSize - 1);  // Get the last item in the queue
-    queue.pop(&lastItem);                     // Remove the last item from the queue
+    queue.peekIdx(&lastItem, queueSize - 1);  
+    queue.pop(&lastItem);                     
     Serial.println("Undo done: " + String(getDirectionLetter(lastItem)));
     printToLCD(2, "Undo done: " + String(getDirectionLetter(lastItem)));
   } else {
@@ -266,6 +234,7 @@ void undoQueue() {
     }
   }
 }
+*/
 
 char getDirectionLetter(int dirCode) {
   switch (dirCode) {
@@ -323,6 +292,7 @@ void loop() {
       else {
         lcd.setCursor(0, 3);
         lcd.print("Object Detection");
+        delay(2000);
       }
       while (digitalRead(modeSwitchPin) == HIGH);
     }
@@ -364,7 +334,7 @@ void loop() {
               }
             } else if (strcmp(authorizedUIDs[i].tagName, "Tag 7") == 0) {
               Serial.println("Undoing queue");
-              undoQueue();
+              // undoQueue();
             } else if (initQueue) {
               handleMovementTag(i);
             } else {
